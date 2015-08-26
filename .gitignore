@@ -12,6 +12,16 @@
 /coverage/
 /InstalledFiles
 /pkg/
+/.idea/workspace.xml
+/.idea/misc.xml
+/.idea/streamsets-cookbooks-solo.iml
+/.idea/scopes
+/.idea/.name
+/.idea/encodings.xml
+/.idea/copyright
+/.idea/modules.xml
+/.idea/compiler.xml
+/.idea/vcs.xml
 /spec/reports/
 /spec/examples.txt
 /test/tmp/
