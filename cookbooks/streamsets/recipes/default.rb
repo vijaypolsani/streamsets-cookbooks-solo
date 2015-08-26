@@ -30,36 +30,42 @@ end
 
 include_recipe 'python::pip'
 
+=begin
 # Add the internal pip server.
 # TODO: Need a better way to add this...
 directory "/root/.pip" do
   action :create
 end
+
 file "/root/.pip/pip.conf" do
   content "[global]\nextra-index-url=http://pypi.lcloud.com:8080/simple\ntrusted-host=pypi.lcloud.com\n"
 end
+=end
 
 python_pip 'requests' do
   action :install
 end
 
-#python_pip 'setuptools' do
-#  action :install
-#end
+python_pip 'setuptools' do
+  action :install
+end
 
-#python_pip 'pip' do
-#  action :upgrade
-#end
+python_pip 'pip' do
+  action :upgrade
+end
 
+=begin
 python_pip 'sdc-cli' do
   version node[cookbook_name]['sdc-cli']['version'] if !node[cookbook_name]['sdc-cli']['version'].nil?
   action :install
 end
+=end
 
-#execute 'install-streamsets-cli' do
-#  command 'pip install /share/sdc-cli-0.1.0.tar.gz'
-#  user 'root'
-#end
+# Use this to install locally.
+execute 'install-streamsets-cli' do
+  command 'pip install /share/sdc-cli-0.1.0.tar.gz'
+  user 'root'
+end
 
 
 template '/etc/sdc/sdc.properties' do
@@ -130,7 +136,7 @@ ruby_block "find_communities" do
     communities.each do |community|
       Chef::Log.info("Community Name: #{community}")
         node.set['streamsets']['pipeline']['configuration']['fileInfos']["#{community}.#{node.lia.phase}"] = {
-            'fileFullPath' => "/home/lithium/customer/#{community}.#{node.lia.phase}/serv/journaling/${PATTERN}",
+            'fileFullPath' => "#{node.streamsets.pipeline.configuration.log_start_path}#{community}.#{node.lia.phase}#{node.streamsets.pipeline.configuration.log_end_path}#{node.streamsets.pipeline.configuration.log_pattern}",
             'fileRollMode' => 'PATTERN',
             'patternForToken' => '.*',
             'firstFile' => ''

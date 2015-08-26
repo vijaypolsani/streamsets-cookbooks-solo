@@ -34,7 +34,8 @@ action :create do
     end
 
     import_pipeline
- 
+
+    Chef::Log.debug("IN wait_for_import_completion. Delay 2 seconds")
     wait_for_import_completion
 
     start_pipeline
@@ -67,6 +68,7 @@ def import_pipeline
   end
 end
 
+=begin
 def wait_for_import_completion
   wait_interval = 1
   max_retries = 10
@@ -76,8 +78,8 @@ def wait_for_import_completion
     block do
       import_completed = false
       until import_completed do
-#        output = 'sdc-cli --sdc-url http://localhost:#{node[cookbook_name]['sdc']['http_port']} --sdc-user admin --sdc-password admin --config-file #{::File.join('/tmp', new_resource.name)}.conf --auth-type form library list'
-        output = "Hello World"
+        output = `sdc-cli --sdc-url http://localhost:#{node[cookbook_name]['sdc']['http_port']} --sdc-user admin --sdc-password admin --config-file #{::File.join('/tmp', new_resource.name)}.conf --auth-type form library list`
+     #  output = "Hello World"
         Chef::Log.info "List operation output: '#{output}'"
         pipelines = output.gsub(/^\[|\]$|\n|\"/,'').split(",")
         import_completed = pipelines.length > 0
@@ -90,7 +92,18 @@ def wait_for_import_completion
     end
   end
 end
+=end
 
+def wait_for_import_completion
+  try =1
+  execute "wait for #{new_resource.name} to be imported" do
+    Chef::Log.debug("IN wait_for_import_completion. Delay 2 seconds #{try+1}")
+    command "sdc-cli --sdc-url http://localhost:#{node[cookbook_name]['sdc']['http_port']} --sdc-user admin --sdc-password admin --config-file #{::File.join('/tmp', new_resource.name)}.conf --auth-type form library list | grep '#{new_resource.name}'"
+    user 'sdc'
+    retries 5
+    retry_delay 2
+  end
+end
 def start_pipeline
   execute "start-pipeline #{new_resource.name}" do
     user 'sdc'

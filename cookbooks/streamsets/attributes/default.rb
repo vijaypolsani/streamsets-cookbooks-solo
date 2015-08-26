@@ -32,7 +32,14 @@ default['lia']['phase'] = 'stage'
 
 default['streamsets']['pipeline']['configuration']['community'] = "${record:attribute('tag')}"
 default['streamsets']['pipeline']['configuration']['env'] = 'stage'
-default['streamsets']['pipeline']['configuration']['base_path'] = '/opt'
+#Use this when merging with Lithium
+#default['streamsets']['pipeline']['configuration']['log_start_path'] = '/home/lithium/customer/'
+default['streamsets']['pipeline']['configuration']['log_start_path'] = '/var/log/'
+#Use this when merging with Lithium
+#default['streamsets']['pipeline']['configuration']['log_end_path'] = '/serv/journaling/'
+default['streamsets']['pipeline']['configuration']['log_end_path'] = ''
+default['streamsets']['pipeline']['configuration']['log_pattern'] = '${PATTERN}'
+default['streamsets']['pipeline']['configuration']['base_path'] = '/var/log'
 
 default['streamsets']['pipeline']['configuration']['topicExpression'] = "${record:attribute('tag')}"
 default['streamsets']['pipeline']['configuration']['metadataBrokerList'] = 'sjc1-kafka-1a-br1.sj.lithium.com:9092,sjc1-kafka-1a-br2.sj.lithium.com:9092,sjc1-kafka-1a-br3.sj.lithium.com:9092'
