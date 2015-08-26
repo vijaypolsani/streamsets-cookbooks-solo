@@ -41,6 +41,6 @@ default['streamsets']['pipeline']['configuration']['log_end_path'] = ''
 default['streamsets']['pipeline']['configuration']['log_pattern'] = '${PATTERN}'
 default['streamsets']['pipeline']['configuration']['base_path'] = '/var/log'
 
-default['streamsets']['pipeline']['configuration']['topicExpression'] = "${record:attribute('tag')}"
+default['streamsets']['pipeline']['configuration']['topicExpression'] = "lia.${record:attribute('tag')}.raw_events"
 default['streamsets']['pipeline']['configuration']['metadataBrokerList'] = 'sjc1-kafka-1a-br1.sj.lithium.com:9092,sjc1-kafka-1a-br2.sj.lithium.com:9092,sjc1-kafka-1a-br3.sj.lithium.com:9092'
 

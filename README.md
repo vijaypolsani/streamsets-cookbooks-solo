@@ -1,12 +1,22 @@
 # streamsets-cookbooks-solo
-StreamSets Chef Cookbooks
-This cookbook is for testing locally using Vagrant for StreamSets.
-1) Clone the project
-2) cd cookbooks/streamsets/
-3) vagrant up
-Note: Makesure Vagrant, VirtualBox is installed on your machine and working
-Input Files Needed:
-streamsets-datacollector-1.0.0b2-1.rpm
-streamsets-datacollector-apache-kafka_0.8.2.0-lib-1.0.0b2-1.rpm
-sdc-cli-0.1.0.tar.gz
+<br>
+** StreamSets Chef Cookbooks for local testing using Vagrant **
+<br>
+* This cookbook is for testing locally using Vagrant for StreamSets. *
+<br>
+- 1) Clone the project
+- 2) cd cookbooks/streamsets/
+- 3) vagrant up
+<br>
+- Note: Makesure Vagrant, VirtualBox is installed on your machine and working
+<br>
+** Input Files Needed:**
+- streamsets-datacollector-1.0.0b2-1.rpm
+- streamsets-datacollector-apache-kafka_0.8.2.0-lib-1.0.0b2-1.rpm
+- sdc-cli-0.1.0.tar.gz
 
+** VagrantFile Configuration **
+* Please change the below according to your machine. Make sure to copy the needed files under sync folder to be available for vagrant *
+<br>
+    - config.vm.network "forwarded_port", guest: 18630, host: 20000
+    - config.vm.synced_folder "/Users/vijay.polsani/Downloads/", "/share/"
