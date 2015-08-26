@@ -77,7 +77,7 @@ def wait_for_import_completion
       import_completed = false
       until import_completed do
 #        output = 'sdc-cli --sdc-url http://localhost:#{node[cookbook_name]['sdc']['http_port']} --sdc-user admin --sdc-password admin --config-file #{::File.join('/tmp', new_resource.name)}.conf --auth-type form library list'
-        output = ['hello','world']
+        output = "Hello World"
         Chef::Log.info "List operation output: '#{output}'"
         pipelines = output.gsub(/^\[|\]$|\n|\"/,'').split(",")
         import_completed = pipelines.length > 0
