@@ -34,7 +34,8 @@ action :create do
     end
 
     import_pipeline
-    sleep 5
+ 
+    wait_for_import_completion
 
     start_pipeline
   end
@@ -66,6 +67,30 @@ def import_pipeline
   end
 end
 
+def wait_for_import_completion
+  wait_interval = 1
+  max_retries = 10
+  retry_count = 0
+
+  ruby_block new_resource.name do
+    block do
+      import_completed = false
+      until import_completed do
+#        output = 'sdc-cli --sdc-url http://localhost:#{node[cookbook_name]['sdc']['http_port']} --sdc-user admin --sdc-password admin --config-file #{::File.join('/tmp', new_resource.name)}.conf --auth-type form library list'
+        output = ['hello','world']
+        Chef::Log.info "List operation output: '#{output}'"
+        pipelines = output.gsub(/^\[|\]$|\n|\"/,'').split(",")
+        import_completed = pipelines.length > 0
+        Chef::Log.info "import_completed: '#{import_completed}'"
+        retry_count += 1
+        raise "Pipeline not imported after '#{retry_count}' attempts before aborting." unless retry_count <= max_retries
+        Chef::Log.info "List of current pipelines: '#{pipelines}'"
+        sleep wait_interval
+      end
+    end
+  end
+end
+
 def start_pipeline
   execute "start-pipeline #{new_resource.name}" do
     user 'sdc'
@@ -86,3 +111,4 @@ def reset_pipeline
     command "sdc-cli --sdc-url http://localhost:#{node[cookbook_name]['sdc']['http_port']} --sdc-user admin --sdc-password admin --auth-type form --config-file #{::File.join('/tmp', new_resource.name)}.conf pipeline reset-origin #{new_resource.name}"
   end
 end
+

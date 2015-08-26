@@ -7,15 +7,14 @@ module StreamsetsHelpers
 
 #TODO: Catch exception if no directory exist and alert
     def self.sub_folders?(base_path)
-      v = []
       Chef::Log.info("Current Directory: #{Dir.pwd}")
       Chef::Log.info("base_path: '#{base_path}'")
       Dir.chdir(base_path)
       Chef::Log.info("Changed Directory: #{Dir.pwd}")
       folderList = Dir.glob('*').select { |f| File.directory? f }
-      v.push(folderList)
-      Chef::Log.info("Total communities: '#{v.length}' '#{folderList}'")
-      return v
+      Chef::Log.info("Total communities: '#{folderList.length}' '#{folderList}'")
+      return folderList
     end
   end
+
 end

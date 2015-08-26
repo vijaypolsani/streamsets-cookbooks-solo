@@ -129,35 +129,19 @@ ruby_block "find_communities" do
     Chef::Log.info("Communities Name:  #{communities}")
     communities.each do |community|
       Chef::Log.info("Community Name: #{community}")
-      community.each do |item|
-        Chef::Log.info("Item Name: #{item}")
-        node.set['streamsets']['pipeline']['configuration']['fileInfos']["#{item}.#{node.lia.phase}"] = {
-            'fileFullPath' => "/home/lithium/customer/#{item}.#{node.lia.phase}/serv/journaling/${PATTERN}",
+        node.set['streamsets']['pipeline']['configuration']['fileInfos']["#{community}.#{node.lia.phase}"] = {
+            'fileFullPath' => "/home/lithium/customer/#{community}.#{node.lia.phase}/serv/journaling/${PATTERN}",
             'fileRollMode' => 'PATTERN',
             'patternForToken' => '.*',
             'firstFile' => ''
         }
-      end
     end
   end
 end
 
 =begin
-node.set['streamsets']['pipeline']['configuration']['fileInfos'][(node['streamsets']['pipeline']['configuration']['community'])]['.'][( node['streamsets']['pipeline']['configuration']['env'])] = {
-    'fileFullPath' => "/home/lithium/customer/[(node['streamsets']['pipeline']['configuration']['community'])]['.'][( node['streamsets']['pipeline']['configuration']['env'])]/serv/journaling/${PATTERN}",
-    'fileRollMode' => 'PATTERN',
-    'patternForToken' => '.*',
-    'firstFile' => ''
-}
-
-
-node.set['streamsets']['pipeline']['configuration']['fileInfos']["#{node.lia.community}.#{node.lia.phase}"] = {
-    'fileFullPath' => "/home/lithium/customer/#{node.lia.community}.#{node.lia.phase}/serv/journaling/${PATTERN}",
-    'fileRollMode' => 'PATTERN',
-    'patternForToken' => '.*',
-    'firstFile' => ''
-}
 =end
+
 streamsets_config node[cookbook_name]['pipeline']['name'] do
   action :create
 end
