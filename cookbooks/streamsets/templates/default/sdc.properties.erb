@@ -1,0 +1,143 @@
+#
+# (c) 2014 StreamSets, Inc. All rights reserved. May not
+# be copied, modified, or distributed in whole or part without
+# written consent of StreamSets, Inc.
+#
+
+# The base URL of the datacollector, used to create email alert messages.
+# If not set http://<hostname>:<http.port> is used
+# <hostname> is resolved using 'hostname -f'
+#sdc.base.http.url=http://<hostname>:<port>
+
+# HTTP configuration
+# The port the data collector runs the SDC HTTP endpoint.
+# If different that -1, the SDC will run on this port
+# If 0, the SDC will pick up a random port
+# If the https.port is different that -1 or 0 and http.port is different than -1 or 0, the HTTP endpoint
+# will redirect to the HTTPS endpoint.
+http.port=<%= @http_port %>
+
+# HTTPS configuration
+
+# The port the data collector runs the SDC HTTPS endpoint.
+# If different that -1, the SDC will run over SSL on this port
+# If 0, the SDC will pick up a random port
+https.port=<%= @https_port %>
+
+# Java keystore file, in the SDC 'etc/' configuration directory
+https.keystore.path=keystore.jks
+
+# Password for the keystore file,
+# By default, the password is loaded from the 'sdc-keystore-password.txt'
+# from the SDC 'etc/' configuration directory
+https.keystore.password=@keystore-password.txt@
+
+# The authentication for the HTTP endpoint of the data collector
+# Valid values are: 'none', 'digest' and 'form'
+#
+http.authentication=form
+
+# Runs the data collector within a Kerberos session which is propagated to all stages.
+# This is useful for stages that require Kerberos authentication with the services they interact with
+kerberos.client.enabled=false
+
+# The kerberos principal to use for the Kerberos session.
+# It should be a service principal. If the hostname part of the service principal is '_HOST' or '0.0.0.0',
+# the hostname will be replaced with the actual complete hostname of the data collector as advertised by the
+# unix command 'hostname -f'
+kerberos.client.principal=sdc/_HOST@EXAMPLE.COM
+
+# The location of the keytab file for the specified principal. If the path is relative, the keytab file will be
+# looked under the data collector configuration directory
+kerberos.client.keytab=sdc.keytab
+
+# The realm used for authentication
+# A file with the realm name and '.properties' extension must exist in the data collector configuration directory
+# If this property is not set, the realm name is '<http.authentication>-realm'
+#http.digest.realm=local-realm
+
+preview.maxBatchSize=10
+preview.maxBatches=10
+
+production.maxBatchSize=1000
+
+#This option determines the number of error records, per stage, that will be retained in memory when the pipeline is
+#running. If set to zero, error records will not be retained in memory.
+#If the specified limit is reached the oldest records will be discarded to make room for the newest one.
+production.maxErrorRecordsPerStage=100
+
+#This option determines the number of pipeline errors that will be retained in memory when the pipeline is
+#running. If set to zero, pipeline errors will not be retained in memory.
+#If the specified limit is reached the oldest error will be discarded to make room for the newest one.
+production.maxPipelineErrors=100
+
+# Max number of concurrent REST calls allowed for the /rest/v1/admin/log endpoint
+max.logtail.concurrent.requests=5
+
+# Max number of concurrent WebSocket calls allowed
+max.webSockets.concurrent.requests=15
+
+ui.local.help.base.url=/docs
+ui.hosted.help.base.url=https://www.streamsets.com/documentation/1.0.0.b2/DCUserGuide/help
+
+ui.refresh.interval.ms=2000
+ui.jvmMetrics.refresh.interval.ms=4000
+
+# SDC sends anonymous usage information using Google Analytics to StreamSets.
+ui.enable.usage.data.collection=true
+
+# If true SDC UI will use WebSocket to fetch pipeline status/metrics/alerts otherwise UI will poll every few seconds
+# to get the Pipeline status/metrics/alerts.
+ui.enable.webSocket=true
+
+# Number of changes supported by undo/redo functionality.
+# UI archives Pipeline Configuration/Rules in browser memory to support undo/redo functionality.
+ui.undo.limit=10
+
+# SMTP configuration to send alert emails
+# All properties starting with 'mail.' are used to create the JavaMail session, supported protocols are 'smtp' & 'smtps'
+mail.transport.protocol=smtp
+mail.smtp.host=localhost
+mail.smtp.port=25
+mail.smtp.auth=false
+mail.smtp.starttls.enable=false
+mail.smtps.host=localhost
+mail.smtps.port=465
+mail.smtps.auth=false
+# If 'mail.smtp.auth' or 'mail.smtps.auth' are to true, these properties are used for the user/password credentials,
+# @email-password.txt@ will load the value from the 'email-password.txt' file in the config directory (where this file is)
+xmail.username=foo
+xmail.password=@email-password.txt@
+# FROM email address to use for the messages
+xmail.from.address=sdc@$localhost
+
+#Value of this property is used to create email message with a link to the console.
+#By default the hostname is used.
+#sdc.base.http.url=http://localhost:18630
+
+#Indicates the location where runtime configuration properties can be found.
+#Value 'embedded' implies that the runtime configuration properties are present in this file and are prefixed with
+#'runtime.conf_'.
+#A value other than 'embedded' is treated as the name of a properties file from which the runtime configuration
+#properties must be picked up. Note that the properties should not be prefixed with 'runtime.conf_' in this case.
+runtime.conf.location=embedded
+
+# SDC Execution mode - cluster|standalone
+sdc.execution.mode=<%= @execution_mode %>
+
+#Observer related
+
+#The size of the queue where the pipeline queues up data rule evaluation requests.
+#Each request is for a stream and contains sampled records for all rules that apply to that lane.
+observer.queue.size=100
+
+#Sampled records which pass evaluation are cached for user to view. This determines the size of the cache and there is
+#once cache per data rule
+observer.sampled.records.cache.size=100
+
+#The time to wait before dropping a data rule evaluation request if the observer queue is full.
+observer.queue.offer.max.wait.time.ms=1000
+
+
+
+

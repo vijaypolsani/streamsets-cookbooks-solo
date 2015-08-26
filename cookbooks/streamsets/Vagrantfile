@@ -1,0 +1,35 @@
+Vagrant.configure("2") do |config|
+
+  config.vm.network "forwarded_port", guest : 18630, host : 20000
+  config.vm.synced_folder "/Users/vijay.polsani/Downloads/", "/share/"
+
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.scope = :box
+  end
+
+  if Vagrant.has_plugin?("vagrant-berkshelf")
+    config.berkshelf.enabled = true
+  end
+
+  config.vm.box = "chef/centos-6.5"
+
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", "1024"]
+  end
+
+  config.vm.define "sdc", primary : true, autostart : true do | server |
+  server.vm.provision :chef_solo do |chef|
+    chef.log_level = :info
+    chef.cookbooks_path = "../../cookbooks"
+
+    chef.json = {
+    }
+
+    chef.run_list = [
+        "recipe[streamsets::default]"
+    ]
+  end
+end
+
+
+end

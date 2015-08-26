@@ -1,0 +1,433 @@
+{
+    "pipelineConfig": {
+        "schemaVersion": 1,
+        "uuid": "b80275cb-7eca-470f-940a-f2f631616d63",
+        "description": "Reading log files and pushing them to Kafka",
+        "configuration": [
+            {
+                "name": "executionMode",
+                "value": "STANDALONE"
+            },
+            {
+                "name": "clusterSlaveMemory",
+                "value":
+                <%= @clusterSlaveMemory %>
+            },
+            {
+                "name": "clusterSlaveJavaOpts",
+                "value": "<%= @clusterSlaveJavaOpts %>"
+            },
+            {
+                "name": "clusterKerberos",
+                "value":
+                <%= @clusterKerberos %>
+            },
+            {
+                "name": "kerberosPrincipal",
+                "value": ""
+            },
+            {
+                "name": "kerberosKeytab",
+                "value": ""
+            },
+            {
+                "name": "clusterLauncherEnv",
+                "value": []
+            },
+            {
+                "name": "deliveryGuarantee",
+                "value": "AT_LEAST_ONCE"
+            },
+            {
+                "name": "badRecordsHandling",
+                "value": "streamsets-datacollector-basic-lib::com_streamsets_pipeline_stage_destination_devnull_ToErrorNullDTarget::1.0.0"
+            },
+            {
+                "name": "constants",
+                "value": []
+            },
+            {
+                "name": "memoryLimitExceeded",
+                "value": "STOP_PIPELINE"
+            },
+            {
+                "name": "memoryLimit",
+                "value": "${jvm:maxMemoryMB() * 0.65}"
+            }
+        ],
+        "uiInfo": {
+            "previewConfig": {
+                "previewSource": "CONFIGURED_SOURCE",
+                "batchSize": 10,
+                "writeToDestinations": false,
+                "rememberMe": false
+            }
+        },
+        "stages": [
+            {
+                "instanceName": "com_streamsets_pipeline_stage_origin_logtail_FileTailDSource1437417467994",
+                "library": "streamsets-datacollector-basic-lib",
+                "stageName": "com_streamsets_pipeline_stage_origin_logtail_FileTailDSource",
+                "stageVersion": "1.0.0",
+                "configuration": [
+                    {
+                        "name": "dataFormat",
+                        "value": "TEXT"
+                    },
+                    {
+                        "name": "multiLineMainPattern",
+                        "value": null
+                    },
+                    {
+                        "name": "charset",
+                        "value": "UTF-8"
+                    },
+                    {
+                        "name": "removeCtrlChars",
+                        "value": false
+                    },
+                    {
+                        "name": "maxLineLength",
+                        "value": 10240
+                    },
+                    {
+                        "name": "batchSize",
+                        "value": 1000
+                    },
+                    {
+                        "name": "maxWaitTimeSecs",
+                        "value": 5
+                    },
+                    {
+                        "name": "fileInfos",
+                        "value": [
+                            <% @config['fileInfos'].each_with_index do |(tag, file_info), index| %>
+                            {
+                                "tag": "<%= tag %>",
+                                "fileFullPath": "<%= file_info['fileFullPath'] %>",
+                                "fileRollMode": "<%= file_info['fileRollMode'] %>",
+                                "patternForToken": "<%= file_info['patternForToken'] %>",
+                                "firstFile": "<%= file_info['firstFile'] %>"
+                            }
+                            <% if index < (@config['fileInfos'].length - 1) %>,
+                            <% end %>
+                            <% end %>
+                        ]
+                    },
+                    {
+                        "name": "postProcessing",
+                        "value": "NONE"
+                    },
+                    {
+                        "name": "archiveDir",
+                        "value": null
+                    },
+                    {
+                        "name": "logMode",
+                        "value": "COMMON_LOG_FORMAT"
+                    },
+                    {
+                        "name": "retainOriginalLine",
+                        "value": false
+                    },
+                    {
+                        "name": "customLogFormat",
+                        "value": "%h %l %u %t \"%r\" %>s %b"
+                    },
+                    {
+                        "name": "regex",
+                        "value": "^(\\S+) (\\S+) (\\S+) \\[([\\w:/]+\\s[+\\-]\\d{4})\\] \"(\\S+) (\\S+) (\\S+)\" (\\d{3}) (\\d+)"
+                    },
+                    {
+                        "name": "fieldPathsToGroupName",
+                        "value": [
+                            {
+                                "fieldPath": "/",
+                                "group": 1
+                            }
+                        ]
+                    },
+                    {
+                        "name": "grokPatternDefinition",
+                        "value": null
+                    },
+                    {
+                        "name": "grokPattern",
+                        "value": "%{COMMONAPACHELOG}"
+                    },
+                    {
+                        "name": "enableLog4jCustomLogFormat",
+                        "value": false
+                    },
+                    {
+                        "name": "log4jCustomLogFormat",
+                        "value": "%r [%t] %-5p %c %x - %m%n"
+                    },
+                    {
+                        "name": "stageOnRecordError",
+                        "value": "TO_ERROR"
+                    }
+                ],
+                "uiInfo": {
+                    "label": "JSONLogFileReader",
+                    "description": "",
+                    "xPos": 64,
+                    "yPos": 45,
+                    "stageType": "SOURCE",
+                    "icon": "/rest/v1/definitions/stages/icon?name=com_streamsets_pipeline_stage_origin_logtail_FileTailDSource&library=streamsets-datacollector-basic-lib&version=1.0.0",
+                    "outputStreamLabels": [
+                        "Output",
+                        "Metadata"
+                    ],
+                    "rawSource": {
+                        "configuration": [
+                            {
+                                "name": "fileName"
+                            }
+                        ]
+                    }
+                },
+                "inputLanes": [],
+                "outputLanes": [
+                    "com_streamsets_pipeline_stage_origin_logtail_FileTailDSource1437417467994OutputLane14374174679940",
+                    "com_streamsets_pipeline_stage_origin_logtail_FileTailDSource1437417467994OutputLane14374174679941"
+                ]
+            },
+            {
+                "instanceName": "com_streamsets_pipeline_stage_destination_kafka_KafkaDTarget1437417477872",
+                "library": "streamsets-datacollector-apache-kafka_0_8_2_0-lib",
+                "stageName": "com_streamsets_pipeline_stage_destination_kafka_KafkaDTarget",
+                "stageVersion": "1.0.0",
+                "configuration": [
+                    {
+                        "name": "metadataBrokerList",
+                        "value": "<%= @config['metadataBrokerList'] %>"
+                    },
+                    {
+                        "name": "runtimeTopicResolution",
+                        "value": true
+                    },
+                    {
+                        "name": "topicExpression",
+                        "value": "<%= @config['topicExpression'] %>"
+                    },
+                    {
+                        "name": "topicWhiteList",
+                        "value": "*"
+                    },
+                    {
+                        "name": "topic",
+                        "value": "stage"
+                    },
+                    {
+                        "name": "partitionStrategy",
+                        "value": "ROUND_ROBIN"
+                    },
+                    {
+                        "name": "partition",
+                        "value": "${0}"
+                    },
+                    {
+                        "name": "dataFormat",
+                        "value": "TEXT"
+                    },
+                    {
+                        "name": "charset",
+                        "value": "UTF-8"
+                    },
+                    {
+                        "name": "singleMessagePerBatch",
+                        "value": false
+                    },
+                    {
+                        "name": "csvFileFormat",
+                        "value": "CSV"
+                    },
+                    {
+                        "name": "kafkaProducerConfigs",
+                        "value": [
+                            {
+                                "key": "queue.buffering.max.ms",
+                                "value": "5000"
+                            },
+                            {
+                                "key": "message.send.max.retries",
+                                "value": "90"
+                            },
+                            {
+                                "key": "retry.backoff.ms",
+                                "value": "10000"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "csvHeader",
+                        "value": "NO_HEADER"
+                    },
+                    {
+                        "name": "csvReplaceNewLines",
+                        "value": true
+                    },
+                    {
+                        "name": "jsonMode",
+                        "value": "MULTIPLE_OBJECTS"
+                    },
+                    {
+                        "name": "textFieldPath",
+                        "value": "/text"
+                    },
+                    {
+                        "name": "textEmptyLineIfNull",
+                        "value": false
+                    },
+                    {
+                        "name": "avroSchema",
+                        "value": null
+                    },
+                    {
+                        "name": "includeSchema",
+                        "value": true
+                    },
+                    {
+                        "name": "stageRequiredFields",
+                        "value": []
+                    },
+                    {
+                        "name": "stageRecordPreconditions",
+                        "value": []
+                    },
+                    {
+                        "name": "stageOnRecordError",
+                        "value": "TO_ERROR"
+                    }
+                ],
+                "uiInfo": {
+                    "label": "STAGE_Kafka_Producer",
+                    "description": "",
+                    "xPos": 280,
+                    "yPos": 50,
+                    "stageType": "TARGET",
+                    "icon": "/rest/v1/definitions/stages/icon?name=com_streamsets_pipeline_stage_destination_kafka_KafkaDTarget&library=streamsets-datacollector-apache-kafka_0_8_2_0-lib&version=1.0.0"
+                },
+                "inputLanes": ["com_streamsets_pipeline_stage_origin_logtail_FileTailDSource1437417467994OutputLane14374174679940"],
+                "outputLanes": []
+            },
+            {
+                "instanceName": "com_streamsets_pipeline_stage_destination_devnull_NullDTarget1437417491170",
+                "library": "streamsets-datacollector-basic-lib",
+                "stageName": "com_streamsets_pipeline_stage_destination_devnull_NullDTarget",
+                "stageVersion": "1.0.0",
+                "configuration": [],
+                "uiInfo": {
+                    "label": "Discard_Metadata",
+                    "description": "",
+                    "xPos": 281,
+                    "yPos": 182,
+                    "stageType": "TARGET",
+                    "icon": "/rest/v1/definitions/stages/icon?name=com_streamsets_pipeline_stage_destination_devnull_NullDTarget&library=streamsets-datacollector-basic-lib&version=1.0.0"
+                },
+                "inputLanes": ["com_streamsets_pipeline_stage_origin_logtail_FileTailDSource1437417467994OutputLane14374174679941"],
+                "outputLanes": []
+            }
+        ],
+        "errorStage": {
+            "instanceName": "com_streamsets_pipeline_stage_destination_devnull_ToErrorNullDTarget1437417723455",
+            "library": "streamsets-datacollector-basic-lib",
+            "stageName": "com_streamsets_pipeline_stage_destination_devnull_ToErrorNullDTarget",
+            "stageVersion": "1.0.0",
+            "configuration": [],
+            "uiInfo": {
+                "label": "Bad Records - Discard",
+                "description": "",
+                "xPos": 501,
+                "yPos": 50,
+                "stageType": "TARGET",
+                "icon": "/assets/stage/defaultTarget.svg"
+            },
+            "inputLanes": [],
+            "outputLanes": []
+        },
+        "info": {
+            "name": "<%= @pipeline_name %>",
+            "description": "Reading log files and pushing them to Kafka",
+            "created": 1437417389914,
+            "lastModified": 1439403925446,
+            "creator": "admin",
+            "lastModifier": "admin",
+            "lastRev": "0",
+            "uuid": "b80275cb-7eca-470f-940a-f2f631616d63",
+            "valid": true
+        },
+        "valid": true,
+        "issues": {
+            "issues": [],
+            "issueCount": 0,
+            "pipelineIssues": [],
+            "stageIssues": {}
+        },
+        "previewable": true
+    },
+    "pipelineRules": {
+        "metricsRuleDefinitions": [
+            {
+                "id": "badRecordsAlertID",
+                "alertText": "High incidence of Bad Records",
+                "metricId": "pipeline.batchErrorRecords.meter",
+                "metricType": "METER",
+                "metricElement": "METER_COUNT",
+                "condition": "${value() > 100}",
+                "sendEmail": false,
+                "enabled": false,
+                "valid": true
+            },
+            {
+                "id": "stageErrorAlertID",
+                "alertText": "High incidence of Error Messages",
+                "metricId": "pipeline.batchErrorMessages.meter",
+                "metricType": "METER",
+                "metricElement": "METER_COUNT",
+                "condition": "${value() > 100}",
+                "sendEmail": false,
+                "enabled": false,
+                "valid": true
+            },
+            {
+                "id": "idleGaugeID",
+                "alertText": "Pipeline is Idle",
+                "metricId": "RuntimeStatsGauge.gauge",
+                "metricType": "GAUGE",
+                "metricElement": "TIME_OF_LAST_RECEIVED_RECORD",
+                "condition": "${time:now() - value() > 120000}",
+                "sendEmail": false,
+                "enabled": false,
+                "valid": true
+            },
+            {
+                "id": "batchTimeAlertID",
+                "alertText": "Batch taking more time to process",
+                "metricId": "RuntimeStatsGauge.gauge",
+                "metricType": "GAUGE",
+                "metricElement": "CURRENT_BATCH_AGE",
+                "condition": "${value() > 200}",
+                "sendEmail": false,
+                "enabled": false,
+                "valid": true
+            },
+            {
+                "id": "memoryLimitAlertID",
+                "alertText": "Memory limit for pipeline exceeded",
+                "metricId": "pipeline.memoryConsumed.counter",
+                "metricType": "COUNTER",
+                "metricElement": "COUNTER_COUNT",
+                "condition": "${value() > (jvm:maxMemoryMB() * 0.65)}",
+                "sendEmail": false,
+                "enabled": false,
+                "valid": true
+            }
+        ],
+        "dataRuleDefinitions": [],
+        "emailIds": [],
+        "uuid": "d8733027-489d-4e83-bcd4-7f64aaab6b2e",
+        "ruleIssues": []
+    }
+}
