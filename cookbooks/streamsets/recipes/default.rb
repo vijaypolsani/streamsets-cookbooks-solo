@@ -67,6 +67,13 @@ execute 'install-streamsets-cli' do
   user 'root'
 end
 
+# Unzip Kafka libraries for creating the TOPIC with 1 Partition & 3 Replicas
+execute 'Unzip kafka_2.10-0.8.2.0.tgz' do
+  command 'tar xzvf /share/kafka_2.10-0.8.2.0.tgz'
+  cwd '/opt/sdc'
+  not_if { File.exists?("/opt/sdc/kafka_2.10-0.8.2.0/bin/kafka-topics.sh") }
+end
+
 
 template '/etc/sdc/sdc.properties' do
   source 'sdc.properties.erb'
@@ -129,24 +136,46 @@ service 'sdc' do
   supports :status => true, :start => true, :stop => true, :restart => true
 end
 
-ruby_block "find_communities" do
-  block do
-    communities = StreamsetsHelpers::CommunitiesList.sub_folders?(node['streamsets']['pipeline']['configuration']['base_path'])
-    Chef::Log.info("Communities Name:  #{communities}")
-    communities.each do |community|
-      Chef::Log.info("Community Name: #{community}")
-        node.set['streamsets']['pipeline']['configuration']['fileInfos']["#{community}.#{node.lia.phase}"] = {
-            'fileFullPath' => "#{node.streamsets.pipeline.configuration.log_start_path}#{community}.#{node.lia.phase}#{node.streamsets.pipeline.configuration.log_end_path}#{node.streamsets.pipeline.configuration.log_pattern}",
-            'fileRollMode' => 'PATTERN',
-            'patternForToken' => '.*',
-            'firstFile' => ''
-        }
-    end
+communities = StreamsetsHelpers::CommunitiesList.sub_folders?(node['streamsets']['pipeline']['configuration']['base_path'])
+# RUN the  TOPIC with 1 Partition & 3 Replicas
+communities.each do |community|
+  Chef::Log.info("Community Name for Topic Creation: #{community}")
+  execute 'Create Topic in Kafka' do
+    command "/opt/sdc/kafka_2.10-0.8.2.0/bin/kafka-topics.sh --create --zookeeper #{node.streamsets.topic.configuration.zookeeper} --partitions 1 --replication-factor 3 --topic #{community}#{node.lia.phase}"
   end
 end
 
 =begin
+ruby_block "Find Communities from Folders" do
+  Chef::Log.info("Communities Name for StreamSets :  #{communities}")
+  communities.each do |community|
+    Chef::Log.info("Community Name for PATH creation in JSON : #{community}")
+    node.set['streamsets']['pipeline']['configuration']['fileInfos']["#{community}#{node.lia.phase}"] = {
+        'fileFullPath' => "#{node.streamsets.pipeline.configuration.log_start_path}#{community}#{node.lia.phase}#{node.streamsets.pipeline.configuration.log_end_path}#{node.streamsets.pipeline.configuration.log_pattern}",
+        'fileRollMode' => 'PATTERN',
+        'patternForToken' => '.*',
+        'firstFile' => ''
+    }
+  end
+end
 =end
+
+ruby_block "Find Communities from Folders" do
+  block do
+    communities = StreamsetsHelpers::CommunitiesList.sub_folders?(node['streamsets']['pipeline']['configuration']['base_path'])
+    Chef::Log.info("Communities Name:  #{communities}")
+    communities.each do |community|
+      Chef::Log.info("Community Name for PATH creation in JSON : #{community}")
+      node.set['streamsets']['pipeline']['configuration']['fileInfos']["#{community}#{node.lia.phase}"] = {
+          'fileFullPath' => "#{node.streamsets.pipeline.configuration.log_start_path}#{community}#{node.lia.phase}#{node.streamsets.pipeline.configuration.log_end_path}#{node.streamsets.pipeline.configuration.log_pattern}",
+          'fileRollMode' => 'PATTERN',
+          'patternForToken' => '.*',
+          'firstFile' => ''
+      }
+    end
+  end
+end
+
 
 streamsets_config node[cookbook_name]['pipeline']['name'] do
   action :create

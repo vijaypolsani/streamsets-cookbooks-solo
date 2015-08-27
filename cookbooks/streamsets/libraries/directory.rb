@@ -5,7 +5,7 @@ module StreamsetsHelpers
   class CommunitiesList
     extend Chef::Mixin::ShellOut
 
-#TODO: Catch exception if no directory exist and alert
+    #TODO: Catch exception if no directory exist and alert
     def self.sub_folders?(base_path)
       Chef::Log.info("Current Directory: #{Dir.pwd}")
       Chef::Log.info("base_path: '#{base_path}'")
@@ -16,5 +16,4 @@ module StreamsetsHelpers
       return folderList
     end
   end
-
 end

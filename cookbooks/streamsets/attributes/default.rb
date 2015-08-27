@@ -26,21 +26,28 @@ default['streamsets']['pipeline']['clusterSlaveMemory'] = 384
 
 #NOTE: Always the community parameter shld come before topicExpression
 default['lia']['community'] = 'testcommunity'
-default['lia']['phase'] = 'stage'
+#Use this when merging with Lithium
+#default['lia']['phase'] = '.stage'
+default['lia']['phase'] = ''
 
 #########DIR########
 
 default['streamsets']['pipeline']['configuration']['community'] = "${record:attribute('tag')}"
-default['streamsets']['pipeline']['configuration']['env'] = 'stage'
 #Use this when merging with Lithium
 #default['streamsets']['pipeline']['configuration']['log_start_path'] = '/home/lithium/customer/'
 default['streamsets']['pipeline']['configuration']['log_start_path'] = '/var/log/'
 #Use this when merging with Lithium
-#default['streamsets']['pipeline']['configuration']['log_end_path'] = '/serv/journaling/'
+#default['streamsets']['pipeline']['configuration']['log_end_path'] = '/serv/journaling'
 default['streamsets']['pipeline']['configuration']['log_end_path'] = ''
-default['streamsets']['pipeline']['configuration']['log_pattern'] = '${PATTERN}'
+default['streamsets']['pipeline']['configuration']['log_pattern'] = '/${PATTERN}'
 default['streamsets']['pipeline']['configuration']['base_path'] = '/var/log'
 
 default['streamsets']['pipeline']['configuration']['topicExpression'] = "lia.${record:attribute('tag')}.raw_events"
-default['streamsets']['pipeline']['configuration']['metadataBrokerList'] = 'sjc1-kafka-1a-br1.sj.lithium.com:9092,sjc1-kafka-1a-br2.sj.lithium.com:9092,sjc1-kafka-1a-br3.sj.lithium.com:9092'
+default['streamsets']['pipeline']['configuration']['metadataBrokerList'] = "sjc1-kafka-1a-br1.sj.lithium.com:9092,sjc1-kafka-1a-br2.sj.lithium.com:9092,sjc1-kafka-1a-br3.sj.lithium.com:9092"
 
+#Topic Creation
+#Dont use HostName for Vagrant Testing. Use this to Merge
+# default['streamsets']['topic']['configuration']['zookeeper'] = "sjc1pzoo06.sj.lithium.com:2181,sjc1pzoo07.sj.lithium.com:2181,sjc1pzoo08.sj.lithium.com:2181,sjc1pzoo09.sj.lithium.com:2181,sjc1pzoo10.sj.lithium.com:2181/kafka/sjc1-kafka-1a"
+default['streamsets']['topic']['configuration']['zookeeper'] = "10.21.110.124:2181,10.21.110.125:2181,10.21.110.126:2181,10.21.110.127:2181,10.21.110.128:2181/kafka/sjc1-kafka-1a"
+#default['streamsets']['topic']['configuration']['replication'] = 3
+#default['streamsets']['topic']['configuration']['partition'] = 1

@@ -104,6 +104,7 @@ def wait_for_import_completion
     retry_delay 2
   end
 end
+
 def start_pipeline
   execute "start-pipeline #{new_resource.name}" do
     user 'sdc'
