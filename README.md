@@ -21,3 +21,9 @@
 <br>
     - config.vm.network "forwarded_port", guest: 18630, host: 20000
     - config.vm.synced_folder "/Users/vijay.polsani/Downloads/", "/share/"
+
+* ASSUMPTIONS *
+This below has a . in front of the name for demarcation. Make sure the env name has this!
+- #default['lia']['phase'] = '.stage'
+This below has a ''. Means no env variable in PROD
+-  default['lia']['phase'] = ''

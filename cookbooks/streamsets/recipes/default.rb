@@ -19,13 +19,13 @@ end
 package node[cookbook_name]['streamsets']['package_name'] do
   action :install
   #Local test for individual cookbook
-  source '/share/streamsets-datacollector-1.0.0b2-1.rpm'
+  source '/share/streamsets-datacollector-1.0.0b2-1.noarch.rpm'
 end
 
 package node[cookbook_name]['apache-kafka']['package_name'] do
   action :install
   #Local test for individual cookbook
-  source '/share/streamsets-datacollector-apache-kafka_0.8.2.0-lib-1.0.0b2-1.rpm'
+  source '/share/streamsets-datacollector-apache-kafka_0.8.2.0-lib-1.0.0b2-1.noarch.rpm'
 end
 
 include_recipe 'python::pip'
