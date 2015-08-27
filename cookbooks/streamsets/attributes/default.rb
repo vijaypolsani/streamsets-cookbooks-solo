@@ -34,16 +34,17 @@ default['lia']['phase'] = ''
 
 default['streamsets']['pipeline']['configuration']['community'] = "${record:attribute('tag')}"
 #Use this when merging with Lithium
-#default['streamsets']['pipeline']['configuration']['log_start_path'] = '/home/lithium/customer/'
-default['streamsets']['pipeline']['configuration']['log_start_path'] = '/var/log/'
-#Use this when merging with Lithium
 #default['streamsets']['pipeline']['configuration']['log_end_path'] = '/serv/journaling'
 default['streamsets']['pipeline']['configuration']['log_end_path'] = ''
 default['streamsets']['pipeline']['configuration']['log_pattern'] = '/${PATTERN}'
-default['streamsets']['pipeline']['configuration']['base_path'] = '/var/log'
+#Use this when merging with Lithium
+#default['streamsets']['pipeline']['configuration']['log_base_path'] = '/home/lithium/customer/'
+default['streamsets']['pipeline']['configuration']['log_base_path'] = '/share/input/'
 
 default['streamsets']['pipeline']['configuration']['topicExpression'] = "lia.${record:attribute('tag')}.raw_events"
-default['streamsets']['pipeline']['configuration']['metadataBrokerList'] = "sjc1-kafka-1a-br1.sj.lithium.com:9092,sjc1-kafka-1a-br2.sj.lithium.com:9092,sjc1-kafka-1a-br3.sj.lithium.com:9092"
+#Use this for Merge
+#default['streamsets']['pipeline']['configuration']['metadataBrokerList'] = "sjc1-kafka-1a-br1.sj.lithium.com:9092,sjc1-kafka-1a-br2.sj.lithium.com:9092,sjc1-kafka-1a-br3.sj.lithium.com:9092"
+default['streamsets']['pipeline']['configuration']['metadataBrokerList'] = "10.10.125.56:9092"
 
 #Topic Creation
 #Dont use HostName for Vagrant Testing. Use this to Merge

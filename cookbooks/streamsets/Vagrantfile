@@ -3,6 +3,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.network "forwarded_port", guest: 18630, host: 20000
   config.vm.synced_folder "/Users/vijay.polsani/Downloads/", "/share/"
+  #config.vm.network "public_network"
+  config.vm.network "private_network", type: "dhcp"
 
   if Vagrant.has_plugin?("vagrant-cachier")
     config.cache.scope = :box

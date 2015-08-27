@@ -23,7 +23,12 @@
     - config.vm.synced_folder "/Users/vijay.polsani/Downloads/", "/share/"
 
 * ASSUMPTIONS *
+<br>
 This below has a . in front of the name for demarcation. Make sure the env name has this!
+<br>
 - #default['lia']['phase'] = '.stage'
+<br>
 This below has a ''. Means no env variable in PROD
 -  default['lia']['phase'] = ''
+- Kafka brokers are reachable. If you cannot reach them, it will fail to send messages.
+
