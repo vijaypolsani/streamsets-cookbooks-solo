@@ -35,7 +35,6 @@ action :create do
 
     import_pipeline
 
-    wait_for_import_completion
 
     start_pipeline
   end
@@ -65,6 +64,7 @@ def import_pipeline
     user 'sdc'
     command "sdc-cli --sdc-url http://localhost:#{node[cookbook_name]['sdc']['http_port']} --sdc-user admin --sdc-password admin --auth-type form --config-file #{::File.join('/tmp', new_resource.name)}.conf --auth-type form library import #{filename}"
   end
+  wait_for_import_completion
 end
 
 =begin

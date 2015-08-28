@@ -157,7 +157,7 @@ communities.each do |community|
   Chef::Log.info("Community Name for Topic Creation: #{community}")
   execute 'Create Topic in Kafka' do
     command "/opt/kafka/kafka_2.10-0.8.2.0/bin/kafka-topics.sh --create --zookeeper #{node.streamsets.topic.configuration.zookeeper} --partitions 1 --replication-factor 3 --topic lia.#{community}.raw_events"
-    not_if "/opt/kafka/kafka_2.10-0.8.2.0/bin/kafka-topics.sh --list --zookeeper #{node.streamsets.topic.configuration.zookeeper} --partitions 1 --replication-factor 3 --topic lia.#{community}.raw_events| grep 'lia.#{community}.raw_events'"
+    not_if "/opt/kafka/kafka_2.10-0.8.2.0/bin/kafka-topics.sh --list --zookeeper #{node.streamsets.topic.configuration.zookeeper} | grep 'lia.#{community}.raw_events'"
   end
 end
 
