@@ -41,12 +41,12 @@ default['streamsets']['pipeline']['configuration']['log_base_path'] = '/share/in
 
 default['streamsets']['pipeline']['configuration']['topicExpression'] = "lia.${record:attribute('tag')}.raw_events"
 #Use this for Merge
-#default['streamsets']['pipeline']['configuration']['metadataBrokerList'] = "sjc1-kafka-1a-br1.sj.lithium.com:9092,sjc1-kafka-1a-br2.sj.lithium.com:9092,sjc1-kafka-1a-br3.sj.lithium.com:9092"
+#default['streamsets']['pipeline']['configuration']['metadataBrokerList'] = "XX"
 default['streamsets']['pipeline']['configuration']['metadataBrokerList'] = "10.10.125.56:9092"
 
 #Topic Creation
 #Dont use HostName for Vagrant Testing. Use this to Merge
-# default['streamsets']['topic']['configuration']['zookeeper'] = "sjc1pzoo06.sj.lithium.com:2181,sjc1pzoo07.sj.lithium.com:2181,sjc1pzoo08.sj.lithium.com:2181,sjc1pzoo09.sj.lithium.com:2181,sjc1pzoo10.sj.lithium.com:2181/kafka/sjc1-kafka-1a"
-default['streamsets']['topic']['configuration']['zookeeper'] = "10.21.110.124:2181,10.21.110.125:2181,10.21.110.126:2181,10.21.110.127:2181,10.21.110.128:2181/kafka/sjc1-kafka-1a"
+# default['streamsets']['topic']['configuration']['zookeeper'] = "XX"
+default['streamsets']['topic']['configuration']['zookeeper'] = "XX"
 #default['streamsets']['topic']['configuration']['replication'] = 3
 #default['streamsets']['topic']['configuration']['partition'] = 1
