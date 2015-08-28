@@ -9,6 +9,7 @@
 
 
 include_recipe 'java'
+include_recipe 'tar'
 
 unless node[cookbook_name]['sdc']['environment'].include?('JAVA_HOME')
   streamset_env = node[cookbook_name]['sdc']['environment'].dup
@@ -68,12 +69,26 @@ execute 'install-streamsets-cli' do
 end
 
 # Unzip Kafka libraries for creating the TOPIC with 1 Partition & 3 Replicas
-execute 'Unzip kafka_2.10-0.8.2.0.tgz' do
-  command 'tar xzvf /share/kafka_2.10-0.8.2.0.tgz'
-  cwd '/opt/sdc'
-  not_if { File.exists?("/opt/sdc/kafka_2.10-0.8.2.0/bin/kafka-topics.sh") }
+execute 'Create sdc directory' do
+  command "mkdir /opt/sdc"
+  creates "/opt/sdc"
 end
 
+tar_extract node['kafka']['package']['location']  do
+#tar_extract 'http://yum.core.lithium.com/lithium/tarballs/kafka_2.10-0.8.2.0.tgz'  do
+  target_dir '/opt/kafka'
+  creates '/opt/sdc/kafka_2.10-0.8.2.0/bin/kafka-topics.sh'
+end
+
+=begin
+
+# Execute command way: Unzip Kafka libraries for creating the TOPIC with 1 Partition & 3 Replicas
+execute 'UnTar kafka_2.10-0.8.2.0.tgz' do
+  command 'mkdir /opt/sdc | tar xzf /share/kafka_2.10-0.8.2.0.tgz'
+  cwd '/opt/sdc'
+  creates '/opt/sdc/kafka_2.10-0.8.2.0/bin/kafka-topics.sh'
+end
+=end
 
 template '/etc/sdc/sdc.properties' do
   source 'sdc.properties.erb'
@@ -141,18 +156,18 @@ communities = StreamsetsHelpers::CommunitiesList.sub_folders?(node['streamsets']
 communities.each do |community|
   Chef::Log.info("Community Name for Topic Creation: #{community}")
   execute 'Create Topic in Kafka' do
-    command "/opt/sdc/kafka_2.10-0.8.2.0/bin/kafka-topics.sh --create --zookeeper #{node.streamsets.topic.configuration.zookeeper} --partitions 1 --replication-factor 3 --topic lia.#{community}#{node.lia.phase}.raw_events"
+    command "/opt/kafka/kafka_2.10-0.8.2.0/bin/kafka-topics.sh --create --zookeeper #{node.streamsets.topic.configuration.zookeeper} --partitions 1 --replication-factor 3 --topic lia.#{community}.raw_events"
+    not_if "/opt/kafka/kafka_2.10-0.8.2.0/bin/kafka-topics.sh --list --zookeeper #{node.streamsets.topic.configuration.zookeeper} --partitions 1 --replication-factor 3 --topic lia.#{community}.raw_events| grep 'lia.#{community}.raw_events'"
   end
 end
 
 ruby_block "Find Communities from Folders" do
   block do
-#    communities = StreamsetsHelpers::CommunitiesList.sub_folders?(node['streamsets']['pipeline']['configuration']['log_base_path'])
     Chef::Log.info("Communities Name:  #{communities}")
     communities.each do |community|
       Chef::Log.info("Community Name for PATH creation in JSON : #{community}")
-      node.set['streamsets']['pipeline']['configuration']['fileInfos']["#{community}#{node.lia.phase}"] = {
-          'fileFullPath' => "#{node.streamsets.pipeline.configuration.log_base_path}#{community}#{node.lia.phase}#{node.streamsets.pipeline.configuration.log_end_path}#{node.streamsets.pipeline.configuration.log_pattern}",
+      node.set['streamsets']['pipeline']['configuration']['fileInfos']["#{community}"] = {
+          'fileFullPath' => "#{node.streamsets.pipeline.configuration.log_base_path}#{community}#{node.streamsets.pipeline.configuration.log_end_path}#{node.streamsets.pipeline.configuration.log_pattern}",
           'fileRollMode' => 'PATTERN',
           'patternForToken' => '.*',
           'firstFile' => ''

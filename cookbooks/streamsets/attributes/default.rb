@@ -8,6 +8,9 @@ default['streamsets']['apache-kafka']['package_name'] = 'streamsets-datacollecto
 default['streamsets']['apache-kafka']['version'] = '1.0.0b2-1'
 default['streamsets']['sdc-cli']['version'] = '0.1.0'
 
+default['kafka']['package']['location'] = 'http://10.21.100.41/lithium/tarballs/kafka_2.10-0.8.2.0.tgz'
+#default['kafka']['package']['location'] = 'http://yum.core.lithium.com/lithium/tarballs/kafka_2.10-0.8.2.0.tgz'
+
 default['streamsets']['pipeline']['clusterSlaveMemory'] = 1024
 default['streamsets']['pipeline']['clusterSlaveJavaOpts'] = '-XX:PermSize=128M -XX:MaxPermSize=256M'
 default['streamsets']['pipeline']['clusterKerberos'] = 'false'
@@ -24,17 +27,12 @@ default['streamsets']['sdc']['environment'] = {}
 default['streamsets']['pipeline']['name'] = 'Firehose_File_Kafka'
 default['streamsets']['pipeline']['clusterSlaveMemory'] = 384
 
-#NOTE: Always the community parameter shld come before topicExpression
-default['lia']['community'] = 'testcommunity'
-#Use this when merging with Lithium
-#default['lia']['phase'] = '.stage'
-default['lia']['phase'] = ''
 
 #########DIR########
 
 default['streamsets']['pipeline']['configuration']['community'] = "${record:attribute('tag')}"
 #Use this when merging with Lithium
-#default['streamsets']['pipeline']['configuration']['log_end_path'] = '/serv/journaling'
+#default['streamsets']['pipeline']['configuration']['log_end_path'] = '/serv/journaling/'
 default['streamsets']['pipeline']['configuration']['log_end_path'] = ''
 default['streamsets']['pipeline']['configuration']['log_pattern'] = '/${PATTERN}'
 #Use this when merging with Lithium

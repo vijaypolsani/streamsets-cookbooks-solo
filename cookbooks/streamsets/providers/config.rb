@@ -35,7 +35,6 @@ action :create do
 
     import_pipeline
 
-    Chef::Log.debug("IN wait_for_import_completion. Delay 2 seconds")
     wait_for_import_completion
 
     start_pipeline
@@ -79,7 +78,6 @@ def wait_for_import_completion
       import_completed = false
       until import_completed do
         output = `sdc-cli --sdc-url http://localhost:#{node[cookbook_name]['sdc']['http_port']} --sdc-user admin --sdc-password admin --config-file #{::File.join('/tmp', new_resource.name)}.conf --auth-type form library list`
-     #  output = "Hello World"
         Chef::Log.info "List operation output: '#{output}'"
         pipelines = output.gsub(/^\[|\]$|\n|\"/,'').split(",")
         import_completed = pipelines.length > 0
@@ -108,21 +106,22 @@ end
 def start_pipeline
   execute "start-pipeline #{new_resource.name}" do
     user 'sdc'
-    command "sdc-cli --sdc-url http://localhost:#{node[cookbook_name]['sdc']['http_port']} --sdc-user admin --sdc-password admin --auth-type form --config-file #{::File.join('/tmp', new_resource.name)}.conf pipeline start #{new_resource.name}"
+    command "sdc-cli --sdc-url http://localhost:#{node[cookbook_name]['sdc']['http_port']} --sdc-user admin --sdc-password admin --config-file #{::File.join('/tmp', new_resource.name)}.conf --auth-type form pipeline start #{new_resource.name}"
   end
 end
 
 def stop_pipeline
   execute "stop-pipeline #{new_resource.name}" do
     user 'sdc'
-    command "sdc-cli --sdc-url http://localhost:#{node[cookbook_name]['sdc']['http_port']} --sdc-user admin --sdc-password admin --auth-type form --config-file #{::File.join('/tmp', new_resource.name)}.conf pipeline stop"
+    command "sdc-cli --sdc-url http://localhost:#{node[cookbook_name]['sdc']['http_port']} --sdc-user admin --sdc-password admin --config-file #{::File.join('/tmp', new_resource.name)}.conf --auth-type form pipeline stop"
   end
 end
 
 def reset_pipeline
   execute "reset-pipeline #{new_resource.name}" do
     user 'sdc'
-    command "sdc-cli --sdc-url http://localhost:#{node[cookbook_name]['sdc']['http_port']} --sdc-user admin --sdc-password admin --auth-type form --config-file #{::File.join('/tmp', new_resource.name)}.conf pipeline reset-origin #{new_resource.name}"
+    command "sdc-cli --sdc-url http://localhost:#{node[cookbook_name]['sdc']['http_port']} --sdc-user admin --sdc-password admin --config-file #{::File.join('/tmp', new_resource.name)}.conf --auth-type form pipeline reset-origin #{new_resource.name}"
   end
 end
+
 

@@ -13,8 +13,8 @@
 ** Input Files Needed:**
 - streamsets-datacollector-1.0.0b2-1.rpm
 - streamsets-datacollector-apache-kafka_0.8.2.0-lib-1.0.0b2-1.rpm
-- sdc-cli-0.1.0.tar.gz
-- kafka_2.10-0.8.2.0.tgz
+- sdc-cli-0.1.0.tar.gz (PIP)
+- kafka_2.10-0.8.2.0.tgz (Binaries)
 
 ** VagrantFile Configuration **
 * Please change the below according to your machine. Make sure to copy the needed files under sync folder to be available for vagrant *
