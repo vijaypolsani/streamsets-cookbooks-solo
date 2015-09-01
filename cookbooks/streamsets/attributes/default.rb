@@ -44,9 +44,14 @@ default['streamsets']['pipeline']['configuration']['topicExpression'] = "lia.${r
 #default['streamsets']['pipeline']['configuration']['metadataBrokerList'] = "XX"
 default['streamsets']['pipeline']['configuration']['metadataBrokerList'] = "10.10.125.56:9092"
 
+default['streamsets']['pipeline']['configuration']['queueBufferingMaxMs'] = '100'
+default['streamsets']['pipeline']['configuration']['messageSendMaxRetries'] = '90'
+default['streamsets']['pipeline']['configuration']['retryBackoffMs'] = '10000'
+default['streamsets']['pipeline']['configuration']['compressionCodec'] = 'LZ4'
+
 #Topic Creation
 #Dont use HostName for Vagrant Testing. Use this to Merge
 # default['streamsets']['topic']['configuration']['zookeeper'] = "XX"
-default['streamsets']['topic']['configuration']['zookeeper'] = "XX"
+default['streamsets']['topic']['configuration']['zookeeper'] = "10.10.125.56:2181"
 #default['streamsets']['topic']['configuration']['replication'] = 3
 #default['streamsets']['topic']['configuration']['partition'] = 1

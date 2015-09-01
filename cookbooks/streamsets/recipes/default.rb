@@ -68,10 +68,19 @@ execute 'install-streamsets-cli' do
   user 'root'
 end
 
+=begin
 # Unzip Kafka libraries for creating the TOPIC with 1 Partition & 3 Replicas
 execute 'Create sdc directory' do
   command "mkdir /opt/sdc"
   creates "/opt/sdc"
+end
+=end
+
+directory '/opt/kafka' do
+  owner 'sdc'
+  group 'sdc'
+  mode '0755'
+  action :create
 end
 
 tar_extract node['kafka']['package']['location']  do

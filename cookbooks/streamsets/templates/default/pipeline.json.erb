@@ -244,21 +244,20 @@
                         "value": "CSV"
                     },
                     {
-                        "name": "kafkaProducerConfigs",
-                        "value": [
-                            {
-                                "key": "queue.buffering.max.ms",
-                                "value": "5000"
-                            },
-                            {
-                                "key": "message.send.max.retries",
-                                "value": "90"
-                            },
-                            {
-                                "key": "retry.backoff.ms",
-                                "value": "10000"
-                            }
-                        ]
+                        "name" : "kafkaProducerConfigs",
+                        "value" : [ {
+                            "key" : "queue.buffering.max.ms",
+                            "value" : "<%= @config['queueBufferingMaxMs'] %>"
+                        }, {
+                            "key" : "message.send.max.retries",
+                            "value" : "<%= @config['messageSendMaxRetries'] %>"
+                        }, {
+                            "key" : "retry.backoff.ms",
+                            "value" : "<%= @config['retryBackoffMs'] %>"
+                        },{
+                            "key" : "compression.codec",
+                            "value" : "<%= @config['compressionCodec'] %>"
+                        } ]
                     },
                     {
                         "name": "csvHeader",
